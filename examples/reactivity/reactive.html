@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="../../packages/vue/dist/vue.global.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      const { reactive, computed, watch, onMounted } = Vue
+      const App = {
+        template: `
+            <div>
+            <span>count is {{ state.count }}</span>
+            <span>plusOne is {{ state.plusOne }}</span>
+            <button @click="increment">state.count++</button>
+            <div>
+            <ul>
+                <li v-for="item in state.data.list" >
+                    <span>{{item.name}}</span>
+                    <span>{{item.age}}</span>
+                </li>
+            <ul>
+                    <button @click="change">修改</button>
+                </div>
+            </div>
+        `,
+        setup() {
+          // reactive state
+         const state = reactive({
+             count: 0,
+             plusOne: computed(() => state.count + 1),
+             data: {
+                 list: [{
+                     name: "小明",
+                     age: 16
+                 },{
+                    name: "小李",
+                    age: 20    
+                 }]
+             }
+         })
+          // method
+          const increment = () => {
+            state.count++
+          }
+          const change = () => {
+              state.data.list[1].name = "小花"
+              state.data.list[1].age = 14
+          }
+          // watch
+          watch(
+            () => state.count * 2,
+            val => {
+              console.log(`count * 2 is ${val}`)
+            }
+          )
+          // lifecycle
+          onMounted(() => {
+            console.log(`mounted`)
+          })
+          // expose bindings on render context
+          return {
+            state,
+            increment,
+            change
+          }
+        }
+      }
+      let vm = Vue.createApp().mount(App, '#app')
+      console.log(vm)
+    </script>
+  </body>
+</html>
