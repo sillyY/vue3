@@ -103,7 +103,7 @@ function createReactiveObject(
   // proxy集合、传入的是rawToReactive，代表原始属性至响应式对象的过程存储，只读属性等比考虑，不做过多解释
   // PS： 暂未清楚作者花费大量篇幅，特意增加只读属性的真正含义
   let observed = toProxy.get(target)
-  // void 0 始终返回undefined ,防止undefined变量被意外修改
+  // void 0 始终返回undefined, 防止undefined变量被意外修改
   if (observed !== void 0) {
     return observed
   }
@@ -132,6 +132,7 @@ function createReactiveObject(
   toRaw.set(observed, target)
   // 存储监听对象集合
   if (!targetMap.has(target)) {
+    // 依赖手机
     targetMap.set(target, new Map())
   }
   return observed

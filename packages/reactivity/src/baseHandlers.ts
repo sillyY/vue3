@@ -20,10 +20,11 @@ function createGetter(isReadonly: boolean) {
     if (typeof key === 'symbol' && builtInSymbols.has(key)) {
       return res
     }
-    // isRef 是检查数据是否是被监听数据
+    // isRef 是检查数据是ref对象，通过判断res.refSymbol是否为true
     if (isRef(res)) {
       return res.value
     }
+    // 依赖收集(追踪)
     track(target, OperationTypes.GET, key)
     return isObject(res)
       ? isReadonly

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
+    <title>Vue3例子</title>
     <script src="../../packages/vue/dist/vue.global.js"></script>
   </head>
   <body>
@@ -14,9 +14,9 @@
       const App = {
         template: `
             <div>
-            <span>count is {{ state.count }}</span>
-            <span>plusOne is {{ state.plusOne }}</span>
-            <button @click="increment">state.count++</button>
+              <p>count is {{ state.count }}</p>
+              <p> plusOne is {{ state.plusOne }}</p>
+              <button @click="increment">count+1</button>
             <div>
             <ul>
                 <li v-for="item in state.data.list" >
@@ -53,10 +53,8 @@
           }
           // watch
           watch(
-            () => state.count * 2,
-            val => {
-              console.log(`count * 2 is ${val}`)
-            }
+            () => state.count,
+            val => console.log(val)
           )
           // lifecycle
           onMounted(() => {

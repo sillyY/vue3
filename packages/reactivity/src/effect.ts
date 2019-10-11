@@ -39,7 +39,7 @@ export function effect(
   fn: Function,
   options: ReactiveEffectOptions = EMPTY_OBJ
 ): ReactiveEffect {
-  // 检测函数是否有isEffect，如果有，则让fn等于fn.raw，即其原始值
+  // 检测函数的isEffect是否为true，如果为true，则让fn等于fn.raw，即其原始值
   if ((fn as ReactiveEffect).isEffect) {
     fn = (fn as ReactiveEffect).raw
   }
@@ -135,22 +135,32 @@ export function track(
   type: OperationTypes,
   key?: string | symbol
 ) {
+  // 是否能追踪
   if (!shouldTrack) {
     return
   }
+  // 让effect 等于活跃栈的最后一个数activeReactiveEffectStack，
+  // 为什么是最后一个呢？
+  // 因为在trigger中，执行完，就被被pop，最后一个表示最新的活跃effect
   const effect = activeReactiveEffectStack[activeReactiveEffectStack.length - 1]
   if (effect) {
+    // 判断track类型是否是iterate
     if (type === OperationTypes.ITERATE) {
       key = ITERATE_KEY
     }
+    // 收集依赖过程
+    // 获取当前目标的依赖集合
     let depsMap = targetMap.get(target)
     if (depsMap === void 0) {
       targetMap.set(target, (depsMap = new Map()))
     }
+    // key! TS类型断言，表示这里key肯定存在值
+    // 获取指定key的依赖集合
     let dep = depsMap.get(key!)
     if (dep === void 0) {
       depsMap.set(key!, (dep = new Set()))
     }
+    // 判断dep中是否存在这个effect, 不存在则添加
     if (!dep.has(effect)) {
       dep.add(effect)
       effect.deps.push(dep)

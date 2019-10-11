@@ -352,11 +352,14 @@ function callSyncHook(
   ctx: any,
   globalMixins: ComponentOptions[]
 ) {
+  // 全局
   callHookFromMixins(name, globalMixins, ctx)
+  // 父组件传递
   const baseHook = options.extends && options.extends[name]
   if (baseHook) {
     baseHook.call(ctx)
   }
+  // 本身
   const mixins = options.mixins
   if (mixins) {
     callHookFromMixins(name, mixins, ctx)
