@@ -77,6 +77,7 @@ function deleteProperty(target: any, key: string | symbol): boolean {
   const result = Reflect.deleteProperty(target, key)
   if (hadKey) {
     /* istanbul ignore else */
+    // 执行依赖
     if (__DEV__) {
       trigger(target, OperationTypes.DELETE, key, { oldValue })
     } else {
@@ -88,11 +89,13 @@ function deleteProperty(target: any, key: string | symbol): boolean {
 
 function has(target: any, key: string | symbol): boolean {
   const result = Reflect.has(target, key)
+  // 收集依赖
   track(target, OperationTypes.HAS, key)
   return result
 }
 
 function ownKeys(target: any): (string | number | symbol)[] {
+  // 收集依赖
   track(target, OperationTypes.ITERATE)
   return Reflect.ownKeys(target)
 }

@@ -164,6 +164,7 @@ export function track(
     if (!dep.has(effect)) {
       dep.add(effect)
       effect.deps.push(dep)
+      // 测试环境添加chunk监控
       if (__DEV__ && effect.onTrack) {
         effect.onTrack({
           effect,
@@ -200,6 +201,7 @@ export function trigger(
       addRunners(effects, computedRunners, depsMap.get(key))
     }
     // also run for iteration key on ADD | DELETE
+    // 测试了几种情况，但depsMap.get(iterationKey)都是undefined, addRunners执行就返回了
     if (type === OperationTypes.ADD || type === OperationTypes.DELETE) {
       const iterationKey = Array.isArray(target) ? 'length' : ITERATE_KEY
       addRunners(effects, computedRunners, depsMap.get(iterationKey))
@@ -210,6 +212,7 @@ export function trigger(
   }
   // Important: computed effects must be run first so that computed getters
   // can be invalidated before any normal effects that depend on them are run.
+  // 遍历computedRunners和effects, 然后执行其中依赖
   computedRunners.forEach(run)
   effects.forEach(run)
 }

@@ -17,6 +17,8 @@
               <p>count is {{ state.count }}</p>
               <p> plusOne is {{ state.plusOne }}</p>
               <button @click="increment">count+1</button>
+              <button @click="modify">修改</button>
+              <p v-if="state.new">{{state.new}}</p>
             <div>
             <ul>
                 <li v-for="item in state.data.list" >
@@ -43,9 +45,16 @@
                  }]
              }
          })
+         const arr = reactive([1,2,3])
           // method
           const increment = () => {
             state.count++
+          }
+          const modify = () => {
+            // console.log(state)
+            // state.new =  1
+            delete arr[0]
+            console.log(arr)
           }
           const change = () => {
               state.data.list[1].name = "小花"
@@ -64,6 +73,8 @@
           return {
             state,
             increment,
+            modify,
+            arr,
             change
           }
         }
